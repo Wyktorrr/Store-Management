@@ -1,5 +1,7 @@
 package com.store.api.management.user.controller;
 
+import com.store.api.management.product.model.ProductDTO;
+import com.store.api.management.product.service.ProductService;
 import com.store.api.management.user.model.UserDTO;
 import com.store.api.management.user.service.impl.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,11 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
+    private final ProductService productService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, ProductService productService) {
         this.userServiceImpl = userService;
+        this.productService = productService;
     }
 
     @PostMapping("/register")
@@ -34,6 +38,16 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userServiceImpl.findAll();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{id}/products")
+    public ResponseEntity<List<ProductDTO>> getProductsByUserId(@PathVariable Long id) {
+        UserDTO user = userServiceImpl.findById(id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<ProductDTO> products = productService.findByUserId(id);
+        return ResponseEntity.ok(products);
     }
 
     @PutMapping("/{id}")
