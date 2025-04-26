@@ -1,12 +1,3 @@
--- Create Address Table for Embedding
-CREATE TABLE addresses
-(
-    id     SERIAL PRIMARY KEY,
-    street VARCHAR(255),
-    city   VARCHAR(100),
-    state  VARCHAR(100)
-);
-
 -- Create User Table
 CREATE TABLE users
 (
@@ -19,9 +10,7 @@ CREATE TABLE users
     profile_picture_url VARCHAR(255),
     role                VARCHAR(20) DEFAULT 'USER',
     created_at          TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
-    updated_at          TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
-    address_id          INT,
-    FOREIGN KEY (address_id) REFERENCES addresses (id) ON DELETE SET NULL
+    updated_at          TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create Product Table

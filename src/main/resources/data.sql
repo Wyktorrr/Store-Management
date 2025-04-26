@@ -1,15 +1,8 @@
--- Insert Initial Addresses
-INSERT INTO addresses (street, city, state)
-VALUES ('123 Main St', 'Springfield', 'IL'),
-       ('456 Elm St', 'Springfield', 'IL');
-
 -- Insert Initial Users
-INSERT INTO users (username, password, email, first_name, last_name, profile_picture_url, role, address_id)
-VALUES ('admin', 'adminpassword', 'admin@example.com', 'Admin', 'User', 'http://example.com/images/admin.jpg', 'ADMIN',
-        1),
-       ('user1', 'userpassword1', 'user1@example.com', 'John', 'Doe', 'http://example.com/images/user1.jpg', 'USER', 1),
-       ('user2', 'userpassword2', 'user2@example.com', 'Jane', 'Smith', 'http://example.com/images/user2.jpg', 'USER',
-        2);
+INSERT INTO users (username, password, email, first_name, last_name, profile_picture_url, role)
+VALUES ('admin', 'adminpassword', 'admin@example.com', 'Admin', 'User', 'http://example.com/images/admin.jpg', 'ADMIN'),
+       ('user1', 'userpassword1', 'user1@example.com', 'John', 'Doe', 'http://example.com/images/user1.jpg', 'USER'),
+       ('user2', 'userpassword2', 'user2@example.com', 'Jane', 'Smith', 'http://example.com/images/user2.jpg', 'USER');
 
 -- Insert Initial Products
 INSERT INTO products (name, description, price, quantity, user_id)
