@@ -1,5 +1,6 @@
 package com.store.api.management.auth;
 
+import com.store.api.management.exception.JwtTokenInvalidException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 logger.error("JWT token validation failed: {}", e.getCause());
                 logger.info("JWT token validation failed: {}" + e.getMessage());
-                e.printStackTrace();
+                throw new JwtTokenInvalidException("JWT token validation failed");
             }
         }
         filterChain.doFilter(request, response); // Continue the filter chain

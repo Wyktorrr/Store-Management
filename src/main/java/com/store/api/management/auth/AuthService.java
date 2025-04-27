@@ -1,17 +1,14 @@
 package com.store.api.management.auth;
 
+import com.store.api.management.exception.InvalidCredentialsException;
 import com.store.api.management.user.model.UserDTO;
 import com.store.api.management.user.model.domain.User;
-import com.store.api.management.user.model.mapper.UserMapper;
 import com.store.api.management.user.service.UserService;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,10 +43,12 @@ public class AuthService {
             );
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(authDTO.getUsername());
+            if (userDetails == null) {
+                throw new InvalidCredentialsException("Invalid username or password.");
+            }
             return generateToken(userDetails);
         } catch (Exception e) {
-            System.err.println("Authentication error: " + e.getMessage());
-            throw e;
+            throw new InvalidCredentialsException("Invalid username or password.");
         }
     }
 

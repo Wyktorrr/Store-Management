@@ -21,12 +21,6 @@ public class UserController {
         this.productService = productService;
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
-//        UserDTO createdUser = userServiceImpl.save(userDTO);
-//        return ResponseEntity.status(201).body(createdUser);
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return userServiceImpl.findById(id)
@@ -50,12 +44,12 @@ public class UserController {
         return ResponseEntity.ok(products);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-//        userDTO.setId(id);
-//        UserDTO updatedUser = userServiceImpl.save(userDTO);
-//        return ResponseEntity.ok(updatedUser);
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        userDTO.setId(id);
+        UserDTO updatedUser = userServiceImpl.updateUser(userDTO);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

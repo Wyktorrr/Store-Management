@@ -1,13 +1,16 @@
 package com.store.api.management.user.service.impl;
 
+import com.store.api.management.exception.ConflictException;
 import com.store.api.management.user.model.UserDTO;
 import com.store.api.management.user.model.domain.User;
 import com.store.api.management.user.model.mapper.UserMapper;
 import com.store.api.management.user.repository.UserRepository;
 import com.store.api.management.user.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +35,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ConflictException("User with email " + user.getEmail() + " already exists.");
+        }
+
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
         return userMapper.userToUserDTO(userRepository.save(user));
+    }
+
+    @Override
+    public UserDTO updateUser(UserDTO userDTO) {
+        userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userDTO.getId()));
+        User existingUser;
+
+        existingUser = userMapper.userDTOToUser(userDTO);
+        existingUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return userMapper.userToUserDTO(userRepository.save(existingUser));
     }
 
     @Override
