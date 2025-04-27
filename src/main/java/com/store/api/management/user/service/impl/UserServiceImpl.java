@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO save(UserDTO userDTO) {
-        User user = userMapper.userDTOToUser(userDTO);
+    public UserDTO save(User user) {
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
