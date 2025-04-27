@@ -5,6 +5,7 @@ import com.store.api.management.product.service.ProductService;
 import com.store.api.management.user.model.UserDTO;
 import com.store.api.management.user.service.impl.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class UserController {
         return ResponseEntity.ok(products);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         userDTO.setId(id);
@@ -51,6 +53,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userServiceImpl.deleteById(id);
