@@ -15,4 +15,6 @@ public interface ProductService {
     void deleteById(Long id);
 
     List<ProductDTO> findByUserId(Long userId);
+
+    ProductDTO updateProductPrice(Long productId, double newPrice);
 }

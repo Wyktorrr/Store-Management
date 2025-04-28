@@ -2,6 +2,7 @@ package com.store.api.management.product.controller;
 
 import com.store.api.management.product.model.ProductDTO;
 import com.store.api.management.product.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,13 @@ public class ProductController {
         productDTO.setId(id);
         ProductDTO updatedProduct = productService.save(productDTO);
         logger.info("Product with ID '{}' updated successfully.", id);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}/price")
+    public ResponseEntity<ProductDTO> updateProductPrice(@PathVariable Long id, @RequestBody double newPrice) {
+        ProductDTO updatedProduct = productService.updateProductPrice(id, newPrice);
         return ResponseEntity.ok(updatedProduct);
     }
 
