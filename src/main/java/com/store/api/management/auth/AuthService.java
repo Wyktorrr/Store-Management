@@ -46,8 +46,10 @@ public class AuthService {
             if (userDetails == null) {
                 throw new InvalidCredentialsException("Invalid username or password.");
             }
+            log.info("User '{}' logged in successfully.", authDTO.getUsername());
             return generateToken(userDetails);
         } catch (Exception e) {
+            log.error("Login attempt failed for username: {}", authDTO.getUsername());
             throw new InvalidCredentialsException("Invalid username or password.");
         }
     }
@@ -68,15 +70,16 @@ public class AuthService {
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
-        return userService.save(user);
-
+        UserDTO createdUser = userService.save(user);
+        log.info("User '{}' registered successfully.", user.getUsername());
+        return createdUser;
     }
 
     private String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(SECRET_KEY)
                 .compact();
     }
