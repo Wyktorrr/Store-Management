@@ -5,9 +5,11 @@ import com.store.api.management.product.model.domain.Product;
 import com.store.api.management.product.model.mapper.ProductMapper;
 import com.store.api.management.product.repository.ProductRepository;
 import com.store.api.management.product.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +48,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findByUserId(Long userId) {
         return productMapper.productListToProductDTOList(productRepository.findByUserId(userId));
+    }
+
+    @Override
+    public ProductDTO updateProductPrice(Long productId, double newPrice) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+        product.setPrice(newPrice);
+        product.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        return productMapper.productToProductDTO(productRepository.save(product));
     }
 }
